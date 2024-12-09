@@ -7,6 +7,8 @@ let angle = 0;
 
 function preload() {
   bodyPose = ml5.bodyPose("BlazePose");
+  heartModel = loadModel('realistic_heart.obj'); // Replace with the path to your model
+
 }
 
 function gotPoses(results) {
@@ -25,6 +27,9 @@ function draw() {
   orbitControl();
   background(0);
 
+  // Turn on the lights.
+  lights();
+
   if (poses.length > 0) {
     let pose = poses[0];
 
@@ -35,6 +40,7 @@ function draw() {
       }
     }
 
+    // keypoints
     for (let i = 0; i < pose.keypoints.length; i++) {
       let keypoint = pose.keypoints3D[i];
       let lerpPoint = lerpPoints[i];
@@ -53,6 +59,7 @@ function draw() {
       }
     }
 
+    // connecting lines
     for (let i = 0; i < connections.length; i++) {
       let connection = connections[i];
       let a = connection[0];
@@ -74,8 +81,32 @@ function draw() {
         endShape();
       }
     }
+
+    // Spawn a 3D heart model at the heart position
+    let leftShoulder = pose.keypoints3D[11]; // Left shoulder keypoint
+    let rightShoulder = pose.keypoints3D[12]; // Right shoulder keypoint
+
+    if (leftShoulder.confidence > 0.3 && rightShoulder.confidence > 0.3) {
+      let heartX = (lerpPoints[11].x + lerpPoints[12].x) / 2 - 0.05;
+      let heartY = (lerpPoints[11].y + lerpPoints[12].y) / 2 + 0.15; // Slightly below the midpoint
+      let heartZ = (lerpPoints[11].z + lerpPoints[12].z) / 2;
+
+      push();
+
+      translate(heartX, heartY, heartZ);
+      scale(0.1); // Reduce the size of the model (adjust the scale factor as needed)
+
+      rotateX(PI); // Rotate the model to correct the upside-down orientation
+     
+      fill(255, 0, 0);
+      noStroke();
+      // sphere(0.05); // Replace with your 3D heart model if available
+      model(heartModel);
+      pop();
+    }
   }
 
+  // for the bottom floor
   stroke(255);
   rectMode(CENTER);
   strokeWeight(1);
