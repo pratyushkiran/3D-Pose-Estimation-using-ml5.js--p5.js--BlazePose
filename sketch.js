@@ -17,7 +17,7 @@ function gotPoses(results) {
 
 function setup() {
   createCanvas(640, 360, WEBGL);
-  video = createCapture(VIDEO, {flipped: true})
+  video = createCapture(VIDEO)
   bodyPose.detectStart(video, gotPoses);
   connections = bodyPose.getSkeleton();
 }
@@ -28,7 +28,12 @@ function draw() {
   background(0);
 
   // Turn on the lights.
-  lights();
+  // lights();
+
+  // Lighting setup
+  ambientLight(255, 0 , 0, 10); // Soft global light
+  // directionalLight(255, 255, 255, 1, 1, 1); // Light coming from top-left-front
+  // pointLight(255, 0, 0, 100, 100, 100); // Red light at a specific point (adjust the position)
 
   if (poses.length > 0) {
     let pose = poses[0];
@@ -47,7 +52,7 @@ function draw() {
       let amt = 0.1;
       lerpPoint.x = lerp(lerpPoint.x, keypoint.x, amt);
       lerpPoint.y = lerp(lerpPoint.y, keypoint.y, amt);
-      lerpPoint.z = lerp(lerpPoint.z, keypoint.z, amt);
+      lerpPoint.z = lerp(lerpPoint.z, -keypoint.z, amt);
 
       stroke(255, 0, 255);
       strokeWeight(8);
@@ -73,7 +78,7 @@ function draw() {
       let confB = keyPointB.confidence;
 
       stroke(0, 255, 255);
-      strokeWeight(4);
+      strokeWeight(2);
       if (confA > 0.1 && confB > 0.1) {
         beginShape();
         vertex(lerpPointA.x, lerpPointA.y, lerpPointA.z);
@@ -87,7 +92,7 @@ function draw() {
     let rightShoulder = pose.keypoints3D[12]; // Right shoulder keypoint
 
     if (leftShoulder.confidence > 0.3 && rightShoulder.confidence > 0.3) {
-      let heartX = (lerpPoints[11].x + lerpPoints[12].x) / 2 - 0.05;
+      let heartX = (lerpPoints[11].x + lerpPoints[12].x) / 2 + 0.05;
       let heartY = (lerpPoints[11].y + lerpPoints[12].y) / 2 + 0.15; // Slightly below the midpoint
       let heartZ = (lerpPoints[11].z + lerpPoints[12].z) / 2;
 
