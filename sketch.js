@@ -34,7 +34,7 @@ function setup() {
 }
 
 function draw() {
-  // scale(50);
+  // scale(5);  
   background(0);
   maintainAspectRatio();
 
@@ -42,16 +42,6 @@ function draw() {
 
   if (poses.length > 0) {
     let pose = poses[0];
-
-    // joker nose
-    // let x = map(pose.nose.x, 0, video.width, videoOffsetX, videoOffsetX + videoWidth);
-    // let y = map(pose.nose.y, 0, video.height, videoOffsetY, videoOffsetY + videoHeight);
-
-    // lerpedX = lerp(lerpedX, x, lerpAmount);
-    // lerpedY = lerp(lerpedY, y, lerpAmount);
-
-    // fill(255, 0, 0);
-    // circle(lerpedX, lerpedY, 40);
 
     // draw keypoints
     for (let i = 0; i < pose.keypoints3D.length; i++) {
