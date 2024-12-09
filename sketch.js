@@ -87,6 +87,7 @@ function draw() {
       }
     }
 
+    
     // Spawn a 3D heart model at the heart position
     let leftShoulder = pose.keypoints3D[11]; // Left shoulder keypoint
     let rightShoulder = pose.keypoints3D[12]; // Right shoulder keypoint
